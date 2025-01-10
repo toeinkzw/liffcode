@@ -89,7 +89,7 @@
 
         function sendText(text) {
             liff.sendMessages([{
-                'type': 'text',
+                'type': text,
                 'text': text
             }]).then(function () {
                 liff.closeWindow();
