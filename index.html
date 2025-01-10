@@ -1,0 +1,125 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGG証明書申請Certificate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+</head>
+<body>
+
+    <form class="w-75 mx-auto">
+        <p class="mt-3">名前Name（漢字orAlphabet</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="name" placeholder="" required>
+        </div>
+        <p class="mt-3">学籍番号/StudentNumber（任意/IfYouRemember）</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="number" >
+        </div>
+        <p class="mt-3">在籍級/CurrentClass</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="classes" required>
+        </div>
+        <p class="mt-3">メールアドレスMailAddress（完成通知が必要な場合/IfNeedCompleteNotice）</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="mail" >
+        </div>
+        <p class="mt-3">提出先/WhereToSubmit（提出先が複数の場合1つずつ申請/OnePlaceOneApply</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="whereto" placeholder="MM/DD" >
+    　　 <p class="mt-3">必要な日/WhenToObtain（明日必要な場合提出後すぐに事務室に来ること/IfNeedTommorrowComeToOfficeAfterSubmitImmideately)</p>
+            <div>
+                <input class="form-control w-100 mt-1" name="WhenTo >
+            </div>
+        </div>
+        <p class="mt-3">証明書の種類/CertificateType</p>
+        <div>
+            <select name="type1">
+                <option>在学証明書/CertificateOfEnrollement</option>
+                <option>卒業（見込み）証明書/CertificateOf(Expected)Graduation</option>
+                <option>出席成績証明書/CertificateOfAttendanceAndTranscript</option>
+                <option>推薦書/LetterOfReccomendation(NeedMoreThan90%Attendance)</option>
+                <option>その他（下の欄に記入）/Others(FillInBelow)</option>
+            </select>
+        </div>
+        <p class="mt-3">証明書の種類/CertificateType2（任意/IfNeed2kinds）</p>
+        <div>
+            <select name="type2">
+                <option>在学証明書/CertificateOfEnrollement</option>
+                <option>卒業（見込み）証明書/CertificateOf(Expected)Graduation</option>
+                <option>出席成績証明書/CertificateOfAttendanceAndTranscript</option>
+                <option>推薦書/LetterOfReccomendation(NeedMoreThan90%Attendance)</option>
+                <option>その他（下の特記事項に記入）/Others(FillInBelow)</option>
+            </select>
+        </div>
+        <p class="mt-3">特記事項/OtherNotice</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="mail" >
+        </div>
+        <input type="submit" class="mt-4 btn btn-primary" value="送信">
+    </form>
+    <textarea>
+        証明書発行上の注意を読んでから申請してください/Please apply after reading notice of certificate
+    </textarea>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+        
+        $(document).ready(function () {
+            const liffId = "2006760967-jQyX2rQ6";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+        
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const name    = $('input[name="name"]').val();
+                const number = $('input[name="number"]').val();
+                const classes  = $('input[name="classes"]').val();
+                const mail  = $('input[name="mail"]').val();
+                const whereto = $('input[name="whereto"]').val();
+                const whento = $('input[name="whento"]').val();
+                const type1 = $('input[name="type1"]').val();
+                const type2 = $('input[name="type2"]').val();
+                const notice = $('input[name="notice"]').val();
+                
+                const msg = `${name}\n${number}\n${classes}\n${mail}\n${whereto}\n${whento}\n${type1}\n${type2}\n${notice}`;
+                sendText(msg);
+
+                return false;
+            });
+        });
+
+    </script>
+
+</body>
+</html>
